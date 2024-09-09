@@ -33,8 +33,16 @@ public class OrthoCamera implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STOPPING.register(this::onClientStopping);
     }
 
+    /**
+     * 处理用户输入的方法
+     * 这个方法负责处理各种键盘输入，包括切换正交相机、调整缩放、固定相机等功能
+     *
+     * @param client Minecraft客户端实例
+     */
     private void handleInput(MinecraftClient client) {
         boolean messageSent = false;
+
+        // 处理切换正交相机的输入
         while (TOGGLE_KEY.wasPressed()) {
             CONFIG.toggle();
             client.getMessageHandler().onGameMessage(
@@ -43,8 +51,11 @@ public class OrthoCamera implements ClientModInitializer {
             );
             messageSent = true;
         }
+
         boolean on = CONFIG.enabled;
         boolean scaleChanged = false;
+
+        // 处理增加缩放的输入
         while (SCALE_INCREASE_KEY.wasPressed()) {
             if (on) {
                 CONFIG.setScaleX(CONFIG.scale_x * SCALE_MUL_INTERVAL);
@@ -53,6 +64,8 @@ public class OrthoCamera implements ClientModInitializer {
                 scaleChanged = true;
             }
         }
+
+        // 处理减少缩放的输入
         while (SCALE_DECREASE_KEY.wasPressed()) {
             if (on) {
                 CONFIG.setScaleX(CONFIG.scale_x / SCALE_MUL_INTERVAL);
@@ -61,6 +74,8 @@ public class OrthoCamera implements ClientModInitializer {
                 scaleChanged = true;
             }
         }
+
+        // 如果缩放发生变化且之前没有发送消息，则发送缩放信息
         if (scaleChanged && !messageSent) {
             client.getMessageHandler().onGameMessage(
                     Text.translatable(
@@ -71,14 +86,20 @@ public class OrthoCamera implements ClientModInitializer {
             );
             messageSent = true;
         }
+
         boolean fixPressed = false;
+        // 处理固定相机的输入
         while (FIX_CAMERA_KEY.wasPressed()) {
             fixPressed = true;
             CONFIG.setFixed(!CONFIG.fixed);
         }
+
+        // 如果之前没有发送消息且固定相机键被按下，则发送相机固定状态信息
         if (!messageSent && fixPressed) {
             client.getMessageHandler().onGameMessage(CONFIG.fixed ? FIXED_TEXT : UNFIXED_TEXT, true);
         }
+
+        // 处理固定相机旋转的输入
         if (FIXED_CAMERA_ROTATE_LEFT_KEY.isPressed()) {
             CONFIG.setFixedYaw(CONFIG.fixed_yaw + CONFIG.fixed_rotate_speed_y);
         }
@@ -91,10 +112,14 @@ public class OrthoCamera implements ClientModInitializer {
         if (FIXED_CAMERA_ROTATE_DOWN_KEY.isPressed()) {
             CONFIG.setFixedPitch(CONFIG.fixed_pitch - CONFIG.fixed_rotate_speed_x);
         }
+
         boolean openScreen = false;
+        // 处理打开选项屏幕的输入
         while (OPEN_OPTIONS_KEY.wasPressed()) {
             openScreen = true;
         }
+
+        // 如果打开选项键被按下，则打开模组配置屏幕
         if (openScreen) {
             client.setScreen(new ModConfigScreen(null));
         }
