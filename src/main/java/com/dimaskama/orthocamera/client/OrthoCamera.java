@@ -5,29 +5,18 @@ import com.dimaskama.orthocamera.client.config.ModConfigScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Matrix4f;
-import org.lwjgl.glfw.GLFW;
+
+import static com.dimaskama.orthocamera.client.OrthoCameraKeyBinding.*;
 
 public class OrthoCamera implements ClientModInitializer {
     public static final String MOD_ID = "orthocamera";
     public static final Logger LOGGER = LogManager.getLogger("OrthoCamera");
     public static final ModConfig CONFIG = new ModConfig("config/orthocamera.json", "assets/orthocamera/default_config.json");
-    private static final KeyBinding TOGGLE_KEY = createKeybinding("toggle", GLFW.GLFW_KEY_KP_4);
-    private static final KeyBinding SCALE_INCREASE_KEY = createKeybinding("scale_increase", GLFW.GLFW_KEY_KP_SUBTRACT);
-    private static final KeyBinding SCALE_DECREASE_KEY = createKeybinding("scale_decrease", GLFW.GLFW_KEY_KP_ADD);
-    private static final KeyBinding OPEN_OPTIONS_KEY = createKeybinding("options", -1);
-    private static final KeyBinding FIX_CAMERA_KEY = createKeybinding("fix_camera", GLFW.GLFW_KEY_KP_MULTIPLY);
-    private static final KeyBinding FIXED_CAMERA_ROTATE_UP_KEY = createKeybinding("fixed_camera_rotate_up", -1);
-    private static final KeyBinding FIXED_CAMERA_ROTATE_DOWN_KEY = createKeybinding("fixed_camera_rotate_down", -1);
-    private static final KeyBinding FIXED_CAMERA_ROTATE_LEFT_KEY = createKeybinding("fixed_camera_rotate_left", -1);
-    private static final KeyBinding FIXED_CAMERA_ROTATE_RIGHT_KEY = createKeybinding("fixed_camera_rotate_right", -1);
     private static final Text ENABLED_TEXT = Text.translatable("orthocamera.enabled");
     private static final Text DISABLED_TEXT = Text.translatable("orthocamera.disabled");
     private static final Text FIXED_TEXT = Text.translatable("orthocamera.fixed");
@@ -38,15 +27,7 @@ public class OrthoCamera implements ClientModInitializer {
     public void onInitializeClient() {
         CONFIG.loadOrCreate();
         CONFIG.enabled &= CONFIG.save_enabled_state;
-        KeyBindingHelper.registerKeyBinding(TOGGLE_KEY);
-        KeyBindingHelper.registerKeyBinding(SCALE_INCREASE_KEY);
-        KeyBindingHelper.registerKeyBinding(SCALE_DECREASE_KEY);
-        KeyBindingHelper.registerKeyBinding(OPEN_OPTIONS_KEY);
-        KeyBindingHelper.registerKeyBinding(FIX_CAMERA_KEY);
-        KeyBindingHelper.registerKeyBinding(FIXED_CAMERA_ROTATE_UP_KEY);
-        KeyBindingHelper.registerKeyBinding(FIXED_CAMERA_ROTATE_DOWN_KEY);
-        KeyBindingHelper.registerKeyBinding(FIXED_CAMERA_ROTATE_LEFT_KEY);
-        KeyBindingHelper.registerKeyBinding(FIXED_CAMERA_ROTATE_RIGHT_KEY);
+        OrthoCameraKeyBinding.register();
         ClientTickEvents.START_CLIENT_TICK.register(c -> CONFIG.tick());
         ClientTickEvents.END_CLIENT_TICK.register(this::handleInput);
         ClientLifecycleEvents.CLIENT_STOPPING.register(this::onClientStopping);
@@ -138,15 +119,6 @@ public class OrthoCamera implements ClientModInitializer {
                 -width, width,
                 -height, height,
                 CONFIG.min_distance, CONFIG.max_distance
-        );
-    }
-
-    private static KeyBinding createKeybinding(String name, int key) {
-        return new KeyBinding(
-                "orthocamera.key." + name,
-                InputUtil.Type.KEYSYM,
-                key,
-                MOD_ID
         );
     }
 }
