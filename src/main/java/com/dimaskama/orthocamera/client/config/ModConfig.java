@@ -193,7 +193,7 @@ public class ModConfig extends JsonConfig {
     }
 
     /**
-     * 切换模组启用状态
+     * 切换正交相机启用状态
      */
     public void toggle() {
         enabled = !enabled;
