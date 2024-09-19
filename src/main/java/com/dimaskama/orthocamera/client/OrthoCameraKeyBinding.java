@@ -11,10 +11,10 @@ public class OrthoCameraKeyBinding {
     public static final KeyBinding SCALE_DECREASE_KEY = createKeybinding("scale_decrease", GLFW.GLFW_KEY_MINUS);
     public static final KeyBinding OPEN_OPTIONS_KEY = createKeybinding("options", GLFW.GLFW_KEY_RIGHT_BRACKET);
     public static final KeyBinding FIX_CAMERA_KEY = createKeybinding("fix_camera", GLFW.GLFW_KEY_LEFT_BRACKET);
-    public static final KeyBinding FIXED_CAMERA_ROTATE_UP_KEY = createKeybinding("fixed_camera_rotate_up", GLFW.GLFW_KEY_8);
-    public static final KeyBinding FIXED_CAMERA_ROTATE_DOWN_KEY = createKeybinding("fixed_camera_rotate_down", GLFW.GLFW_KEY_2);
-    public static final KeyBinding FIXED_CAMERA_ROTATE_LEFT_KEY = createKeybinding("fixed_camera_rotate_left", GLFW.GLFW_KEY_4);
-    public static final KeyBinding FIXED_CAMERA_ROTATE_RIGHT_KEY = createKeybinding("fixed_camera_rotate_right", GLFW.GLFW_KEY_6);
+    public static final KeyBinding FIXED_CAMERA_ROTATE_UP_KEY = createKeybinding("fixed_camera_rotate_up", GLFW.GLFW_KEY_KP_8);
+    public static final KeyBinding FIXED_CAMERA_ROTATE_DOWN_KEY = createKeybinding("fixed_camera_rotate_down", GLFW.GLFW_KEY_KP_2);
+    public static final KeyBinding FIXED_CAMERA_ROTATE_LEFT_KEY = createKeybinding("fixed_camera_rotate_left", GLFW.GLFW_KEY_KP_4);
+    public static final KeyBinding FIXED_CAMERA_ROTATE_RIGHT_KEY = createKeybinding("fixed_camera_rotate_right", GLFW.GLFW_KEY_KP_6);
 
     public static void register() {
         KeyBindingHelper.registerKeyBinding(TOGGLE_KEY);
